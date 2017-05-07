@@ -1,0 +1,38 @@
+{
+  "name": "freacal-test",
+  "version": "0.1.0",
+  "private": false,
+  "author": "Pete Nykänen <pete.a.nykanen@gmail.com>",
+  "dependencies": {
+    "add": "^2.0.6",
+    "eslint-config-motley": "^6.1.0",
+    "freactal": "^1.0.0",
+    "moment": "^2.18.1",
+    "now": "^5.2.1",
+    "prop-types": "^15.5.8",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-emojione": "^3.1.7",
+    "serve": "^5.1.4",
+    "styled-components": "^1.4.6",
+    "yarn": "^0.23.4"
+  },
+  "devDependencies": {
+    "eslint": "3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2 || ^4.0.0",
+    "eslint-plugin-react": "^6.9.0",
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "motley-eslint-init": "motley-eslint-init",
+    "eslint": "eslint",
+    "now-start": "serve ./build --single",
+    "deploy": "npm run build && now"
+  }
+}

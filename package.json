@@ -1,5 +1,5 @@
 {
-  "name": "freacal-test",
+  "name": "freactal-test",
   "version": "0.1.0",
   "private": false,
   "author": "Pete Nykänen <pete.a.nykanen@gmail.com>",
@@ -32,8 +32,7 @@
     "eject": "react-scripts eject",
     "motley-eslint-init": "motley-eslint-init",
     "eslint": "eslint",
-    "now-build": "echo 'skipping build in teh cloud'",
     "now-start": "serve ./build --single",
-    "deploy": "npm run build && now"
+    "deploy": "now"
   }
 }

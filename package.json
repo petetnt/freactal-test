@@ -32,6 +32,7 @@
     "eject": "react-scripts eject",
     "motley-eslint-init": "motley-eslint-init",
     "eslint": "eslint",
+    "now-build": "echo 'skipping build in teh cloud'",
     "now-start": "serve ./build --single",
     "deploy": "npm run build && now"
   }

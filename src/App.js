@@ -7,15 +7,21 @@ import moment from "moment";
 
 const startTime = moment();
 
-const createEvent = (message, state) => {
+const messages = {
+  finland: "Finland scores!",
+  france: "France scores!",
+  start: "Game started!",
+};
+
+const createEvent = (team, state) => {
   if (!state) {
-    return `00:00 : ${message}`;
+    return `00:00 : ${messages.start}`;
   }
 
   const { finland, france } = state;
   const timeNow = moment().diff(startTime);
 
-  return `${moment(timeNow).format("mm:ss")} : ${message} (${france} – ${finland})`;
+  return `${moment(timeNow).format("mm:ss")} : ${messages[team]} (${france} – ${finland})`;
 };
 
 const wrapComponentWithState = provideState({
@@ -24,31 +30,31 @@ const wrapComponentWithState = provideState({
     finland: 0,
     events: [createEvent("Game starts!")],
   }),
+  middleware: [
+    ctx => Object.assign({}, ctx, {
+      effects: Object.keys(ctx.effects).reduce((memo, key) => {
+        const next = { ...memo };
+        next[key] = (...args) => ctx.effects[key](...args).then((res) => {
+          if (key === "addOne") {
+            return ctx.effects.createEvent(...args);
+          }
+
+          return res;
+        });
+
+        return next;
+      }, {}),
+    }),
+  ],
   effects: {
-    addOneToFrance: () => (state) => {
-      const scoreState = {
-        ...state,
-        france: 1 + state.france,
-      };
-      const newEvents = [...state.events, createEvent("France scores!", scoreState)];
-
-      return {
-        ...scoreState,
-        events: newEvents,
-      };
-    },
-    addOneToFinland: () => (state) => {
-      const scoreState = {
-        ...state,
-        finland: 1 + state.finland,
-      };
-      const newEvents = [...state.events, createEvent("Finland scores!", scoreState)];
-
-      return {
-        ...scoreState,
-        events: newEvents,
-      };
-    },
+    createEvent: (effects, team) => state => ({
+      ...state,
+      events: [...state.events, createEvent(team, state)],
+    }),
+    addOne: (effects, team) => Promise.resolve(state => ({
+      ...state,
+      [team]: state[team] + 1,
+    })),
   },
 });
 
@@ -128,8 +134,7 @@ const Child = ({
     events,
   },
   effects: {
-    addOneToFinland,
-    addOneToFrance,
+    addOne,
   },
 }) => (
   <Wrapper>
@@ -139,8 +144,8 @@ const Child = ({
       <StyledTeam flag={":flag_fi:"} name={"Finland"} score={finland} direction="row-reverse" />
     </Teams>
     <Buttons>
-      <Button onClick={addOneToFrance}>+1 France</Button>
-      <Button onClick={addOneToFinland}>+1 Finland</Button>
+      <Button onClick={() => addOne("france")}>+1 France</Button>
+      <Button onClick={() => addOne("finland")}>+1 Finland</Button>
     </Buttons>
     <Events>
       <b>Events:</b>
